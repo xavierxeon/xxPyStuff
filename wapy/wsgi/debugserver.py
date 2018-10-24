@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-import os
-
-
 class DebugServer:
 
     _port = 8080
