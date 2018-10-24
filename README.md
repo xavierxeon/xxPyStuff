@@ -10,7 +10,7 @@ sudo /usr/bin/env python3 -m pip install git+https://github.com/xavierxeon/Pytho
 -> for a local install add `--user` at the end
 
 ---
-## Requieres
+## Requiered
 
  * pyside2
 
