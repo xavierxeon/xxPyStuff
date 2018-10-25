@@ -4,7 +4,7 @@ import setuptools
 
 setuptools.setup(
     name="wapy",
-    version="0.0.2",
+    version="0.0.3",
     author="Ralf Waspe",
     author_email="ralf@waspe.de",
     license='MIT',
