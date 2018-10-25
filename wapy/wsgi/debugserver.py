@@ -4,12 +4,9 @@ class DebugServer:
 
     _port = 8080
 
-    def __init__(self, rootApp, relUrl):
+    def __init__(self, rootApp):
 
         self._rootApp = rootApp
-        self._relUrl = relUrl
-        if relUrl.startswith('/'):
-            self._relUrl = relUrl[1 : ]
 
     def start(self, delayToOpenBorwser = 0.0):
 
@@ -32,4 +29,4 @@ class DebugServer:
     def _openBrowser(self):
 
         import webbrowser
-        webbrowser.open('http://localhost:{0}/{1}'.format(self._port, self._relUrl))
+        webbrowser.open('http://localhost:{0}'.format(self._port))

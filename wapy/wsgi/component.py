@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-class WebComponent:
+class Component:
 
     _contentTypes = {
         'html': 'text/html'
