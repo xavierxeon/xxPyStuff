@@ -17,12 +17,15 @@ class WebApplication(WebComponent):
         , 'xml': 'application/xml'
     }
 
-    def __init__(self, rootPath, startPage):
+    def __init__(self, rootPath, scriptName, startPage):
 
         WebComponent.__init__(self)
 
         self._rootPath = rootPath
+        self._scriptName = scriptName
         self._startPage = startPage
+
+        self._callPath = ''
 
     def __call__(self, env, responseFunction):
 
@@ -30,10 +33,18 @@ class WebApplication(WebComponent):
             return self._handlePost(env, responseFunction)
 
         request = env["PATH_INFO"]
-        if '/' is request:
+        print(self._callPath)
+        print(request)
+        if self._scriptName in request:
+            self._compileCallPath(request)
             fileName = self._rootPath + '/' + self._startPage 
         else:
+            if self._callPath + '/' in request:
+                request = request.replace(self._callPath, '', 1)
             fileName = self._rootPath + request
+
+        print(request)
+        print(fileName)
 
         if not os.path.exists(fileName):
             return self._notFound(responseFunction)
@@ -44,6 +55,17 @@ class WebApplication(WebComponent):
             content = infile.read()
 
         return self._response(responseFunction, fileType, content)
+
+    def _compileCallPath(self, request):
+
+        if self._callPath:
+            return
+
+        callPath = request.replace(self._scriptName, '')    
+        if callPath.endswith('/'):
+            callPath = callPath[ : -1]
+
+        self._callPath = callPath
 
     def _handlePost(self, env, responseFunction):
 
