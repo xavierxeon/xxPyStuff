@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 
-class Component:
+class Application:
 
     _contentTypes = {
         'html': 'text/html'
         , 'css': 'text/css'
         , 'jpeg': 'image/jpeg'
         , 'png': 'image/png'
+        , 'svg': 'image/svg+xml'
         , 'json': 'application/json'
         , 'js': 'application/javascript'
         , 'xml': 'application/xml'
+        , 'ico': 'image/x-icon'
     }
 
     def __init__(self):
@@ -34,6 +36,15 @@ class Component:
 
         responseFunction('200 OK', [('Content-type', contentType)])
         return [content.encode()]
+
+    def _responseBinary(self, responseFunction, fileType, content):
+
+        contentType = 'application/octet-stream'
+        if fileType in self._contentTypes:
+            contentType = self._contentTypes[fileType]
+
+        responseFunction('200 OK', [('Content-type', contentType)])
+        return [content]
 
     def _setPostArgs(self, postArgs):
 

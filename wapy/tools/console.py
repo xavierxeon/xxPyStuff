@@ -30,7 +30,7 @@ class Console:
         return Console._write(message, bold, '\033[94m')
             
     @staticmethod
-    def magneta(message, bold = False):
+    def magenta(message, bold = False):
         return Console._write(message, bold, '\033[95m')
 
     @staticmethod
