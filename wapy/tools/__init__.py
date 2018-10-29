@@ -2,4 +2,5 @@
 
 from .console import Console
 from .progress import Progress
-from .jsonsettings import JSONSettings, SettingsError
+from .process import Process
+from .jsonsettings import JSONSettings

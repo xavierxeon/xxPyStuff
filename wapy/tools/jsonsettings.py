@@ -4,11 +4,11 @@ import os, json
 
 from .console import Console
 
-class SettingsError(Exception):
-
-    pass
-
 class JSONSettings:
+
+    class SettingsError(Exception):
+
+        pass
 
     def __init__(self, fileName, template):
 
@@ -36,7 +36,7 @@ class JSONSettings:
     def _abort(self, message):
 
         message = Console.red('{0} in settings file ').format(message) + Console.magenta('{0}').format(self._fileName)
-        raise SettingsError(message) 
+        raise JSONSettings.SettingsError(message) 
 
     def _sanityCheck(self):
 
