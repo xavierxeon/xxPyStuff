@@ -7,8 +7,11 @@ To install this package globally:
 sudo /usr/bin/env python3 -m pip install git+https://github.com/xavierxeon/PythonPackage.git
 ```
 
--> for a local install add `--user` at the end
+-> for a local install:
 
+```bash
+/usr/bin/env python3 -m pip install git+https://github.com/xavierxeon/PythonPackage.git --user
+```
 ---
 ## Requiered
 
