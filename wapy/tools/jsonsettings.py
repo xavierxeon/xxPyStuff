@@ -66,6 +66,4 @@ class JSONSettings:
                 missing = '", "'.join(missingList)
             self._abort('entry "{0}" is missing'.format(missing))
             
-        if not self._data['certdir']:
-            self._abort('entry "certdir" is empty')
                        
