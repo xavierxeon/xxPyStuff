@@ -9,24 +9,24 @@ class ProgressBar:
 
         self.text = None
 
-        self._counter = 0
+        self._segments = 0
     
-    def __call__(self, size, maxSize):
+    def __call__(self, count, maxCount):
 
-        if maxSize == 0:
+        if maxCount == 0:
             percent = 0
-            self._counter += 1
-            if self._counter == 10:
-                self._counter = 0
+            self._segments += 1
+            if self._segments == 10:
+                self._segments = 0
         else:
-            percent = 100 * size / maxSize
-            if size >= maxSize:
-                self._counter = 10
+            percent = 100 * count / maxCount
+            if count >= maxCount:
+                self._segments = 10
             else:
-                self._counter = math.floor(percent / 10)
+                self._segments = math.floor(percent / 10)
             
-        done = '#' * self._counter
-        remain = '_' * (10 - self._counter)
+        done = '#' * self._segments
+        remain = '_' * (10 - self._segments)
         message = Console.white('[{0}{1}]', True).format(done, remain)
         message += Console.yellow(' {0:.2f} %').format(percent)
         if self.text:
@@ -34,7 +34,10 @@ class ProgressBar:
 
         print('\r' + message, end = '', flush = True)
     
-    def clear(self):
+    def clear(self, trailer):
 
         self.text = None
-        print('', flush = True)
+        if trailer:
+            print(' ' + trailer, flush = True)
+        else:
+            print('', flush = True)
