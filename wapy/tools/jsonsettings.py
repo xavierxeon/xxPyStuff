@@ -16,12 +16,13 @@ class JSONSettings:
         self._template = template
         self._data = dict()
 
-    def load(self):
+    def load(self, abortIfFileNotExist = True):
 
         if not os.path.exists(self._fileName):
             with open(self._fileName, 'w') as output:
                 json.dump(self._template, output, indent = 4)
-            self._abort('please edit the values')
+            if abortIfFileNotExist:
+                self._abort('please edit the values')
 
         with open(self._fileName, 'r') as infile:
             self._data = json.load(infile)
