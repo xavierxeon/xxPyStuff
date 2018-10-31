@@ -5,7 +5,7 @@
 
 from .console import Console
 
-class Progress:
+class ProgressIndicator:
 
     _symbols = ['-', '/', '|', '\\']
 
