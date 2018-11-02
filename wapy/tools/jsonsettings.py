@@ -32,7 +32,7 @@ class JSONSettings:
     def save(self):
 
         with open(self._fileName, 'w') as outfile:
-            json.dump(self.data, outfile)
+            json.dump(self._data, outfile, indent = 4)
 
     def _abort(self, message):
 
