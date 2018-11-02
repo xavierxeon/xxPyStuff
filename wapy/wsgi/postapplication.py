@@ -7,9 +7,13 @@ class PostApplication(Application):
     def __init__(self):
 
         Application.__init__(self)
-        self._postFunctionDict = dict()        
+        self._postFunctionDict = dict()      
 
-    def _handlePost(self, env, responseFunction):
+    def __call__(self, env, responseFunction):
+
+        if env['REQUEST_METHOD'] != 'POST':
+            print('PostApplication: not a post request, got ' + env['REQUEST_METHOD'])
+            return self._notFound(responseFunction)
 
         try:
             length = int(env.get('CONTENT_LENGTH', '0'))
@@ -17,8 +21,6 @@ class PostApplication(Application):
             length = 0
                 
         body = env['wsgi.input'].read(length).decode()
-        request = env["PATH_INFO"]
-                
         postArgs = dict()
         
         fields = body.split('&')
@@ -28,15 +30,21 @@ class PostApplication(Application):
                 continue 
             postArgs[content[0]] = content[1]
 
-        if not postArgs:
-            print(' => no argumets')
-        else:
-            print(' => {0} argumets'.format(len(postArgs)))
-            for key, value in postArgs.items():
-                print(' * {0} = {1}'.format(key, value))
 
         if 'function' in postArgs:
             functionName = postArgs['function']
-            print('execute function {0}'.format(functionName))
+            if functionName in self._postFunctionDict:
+                return self._postFunctionDict[functionName](postArgs, responseFunction)
+        else:
+            print('no function in postArgs')
+            if not postArgs:
+                print(' * postArgs are empty')
+            else:
+                for key, value in postArgs.items():
+                    print(' * {0}:{1}'.format(key, value))
 
-        return self._notFound(responseFunction)        
+        return self._notFound(responseFunction)     
+
+    def _registerFunction(self, key, function):
+
+        self._postFunctionDict[key] = function
