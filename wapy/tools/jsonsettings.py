@@ -14,7 +14,7 @@ class JSONSettings:
 
         self._fileName = fileName
         self._template = template
-        self._data = dict()
+        self.data = dict()
 
     def load(self, abortIfFileNotExist = True):
 
@@ -25,14 +25,14 @@ class JSONSettings:
                 self._abort('please edit the values')
 
         with open(self._fileName, 'r') as infile:
-            self._data = json.load(infile)
+            self.data = json.load(infile)
 
         self._sanityCheck()  
 
     def save(self):
 
         with open(self._fileName, 'w') as outfile:
-            json.dump(self._data, outfile)
+            json.dump(self.data, outfile)
 
     def _abort(self, message):
 
@@ -52,7 +52,7 @@ class JSONSettings:
             return keyList
 
         templateKeyList = compileKeyList(self._template)
-        dataKeyList = compileKeyList(self._data)
+        dataKeyList = compileKeyList(self.data)
 
         missingList = list()
 

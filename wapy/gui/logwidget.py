@@ -46,14 +46,11 @@ class LogWidget(QWidget):
 
         QWidget.__init__(self)
 
-        label = QLabel('Messages')
-
         textEdit = QTextEdit()
         sys.stdout = Logger(textEdit)
         sys.stderr = Logger(textEdit, QColor(255, 0, 0))
 
         masterLayout = QVBoxLayout(self)
-        masterLayout.addWidget(label)
         masterLayout.addWidget(textEdit)
 
         self._edit = textEdit
