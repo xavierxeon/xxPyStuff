@@ -21,18 +21,19 @@ class JSONSettings:
         if not os.path.exists(self._fileName):
             with open(self._fileName, 'w') as output:
                 json.dump(self._template, output, indent = 4)
+                self.data = self._template
             if abortIfFileNotExist:
                 self._abort('please edit the values')
+        else:
+            with open(self._fileName, 'r') as infile:
+                self.data = json.load(infile)
 
-        with open(self._fileName, 'r') as infile:
-            self.data = json.load(infile)
-
-        self._sanityCheck()  
+            self._sanityCheck()  
 
     def save(self):
 
         with open(self._fileName, 'w') as outfile:
-            json.dump(self._data, outfile, indent = 4)
+            json.dump(self.data, outfile, indent = 4)
 
     def _abort(self, message):
 
