@@ -2,7 +2,7 @@
 
 class Console:
 
-    class _ColorBash:
+    class Color:
         Clear = '\033[0m'
         Bold = '\033[1m'
         Grey = '\033[90m'
@@ -14,12 +14,9 @@ class Console:
         Cyan = '\033[96m'
         White = '\033[97m'
 
-    Color = None
-
     @staticmethod
     def _init():
-        if not Console.Color:
-            Console.Color = Console._ColorBash            
+        pass
 
     @staticmethod
     def _write(message, bold, color):
