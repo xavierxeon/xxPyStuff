@@ -17,10 +17,12 @@ class Console:
     Color = None
 
     @staticmethod
-    def _write(message, bold, color):
+    def _init():
         if not Console.Color:
-            Console.Color = Console._ColorBash
-            
+            Console.Color = Console._ColorBash            
+
+    @staticmethod
+    def _write(message, bold, color):
         if bold:
             return Console.Color.Bold + color + message + Console.Color.Clear    
         else:
@@ -28,32 +30,40 @@ class Console:
 
     @staticmethod
     def grey(message, bold = False):
+        Console._init()
         return Console._write(message, bold, Console.Color.Grey)
 
     @staticmethod
     def red(message, bold = False):
+        Console._init()
         return Console._write(message, bold, Console.Color.Red)
 
     @staticmethod
     def green(message, bold = False):
+        Console._init()
         return Console._write(message, bold, Console.Color.Green)        
 
     @staticmethod
     def yellow(message, bold = False):
+        Console._init()
         return Console._write(message, bold, Console.Color.Yellow)
 
     @staticmethod
     def blue(message, bold = False):
+        Console._init()
         return Console._write(message, bold, Console.Color.Blue)
             
     @staticmethod
     def magenta(message, bold = False):
+        Console._init()
         return Console._write(message, bold, Console.Color.Magenta)
 
     @staticmethod
     def cyan(message, bold = False):
+        Console._init()
         return Console._write(message, bold, Console.Color.Cyan)
 
     @staticmethod
     def white(message, bold = False):
+        Console._init()
         return Console._write(message, bold, Console.Color.White)  
