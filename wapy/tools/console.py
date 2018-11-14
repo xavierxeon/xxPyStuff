@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 
 class Console:
 
@@ -16,7 +16,9 @@ class Console:
 
     @staticmethod
     def _init():
-        pass
+        # make output look nice in windows cmd window 
+        from colorama import init
+        init()
 
     @staticmethod
     def _write(message, bold, color):
