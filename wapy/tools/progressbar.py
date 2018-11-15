@@ -5,7 +5,7 @@ from .console import Console
 
 class ProgressBar:    
 
-    _symbols = ['-', '/', '|', '\\']
+    _symbols = [Console.green('-'), Console.green('/'), Console.green('|'), Console.green('\\')]
 
     def __init__(self):
 
@@ -15,9 +15,9 @@ class ProgressBar:
     def __call__(self, count, maxCount = None):
 
         if not maxCount:
-            symbol = Console.green(self._symbols[self._segments])
+            symbol = ProgressBar._symbols[self._segments]
             self._segments += 1
-            if self._segments >= len(self._symbols):
+            if self._segments >= len(ProgressBar._symbols):
                 self._segments = 0
 
             if self.text:

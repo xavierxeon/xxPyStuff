@@ -14,11 +14,17 @@ class Console:
         Cyan = '\033[96m'
         White = '\033[97m'
 
+    __initilized = False
+
     @staticmethod
     def _init():
+        if Console.__initilized:
+            return
+
         # make output look nice in windows cmd window 
         from colorama import init
         init()
+        Console.__initilized = True
 
     @staticmethod
     def _write(message, bold, color):
