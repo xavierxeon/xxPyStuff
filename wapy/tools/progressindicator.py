@@ -7,7 +7,7 @@ from .console import Console
 
 class ProgressIndicator:
 
-    _symbols = ['-', '/', '|', '\\']
+    _symbols = [Console.green('-'), Console.green('/'), Console.green('|'), Console.green('\\')]
 
     def __init__(self):
 
@@ -45,11 +45,11 @@ class ProgressIndicator:
         message = ''
         if self._leader:
             message += self._leader + ' '
-        
-        message += Console.green(self._symbols[self._counter])
+
+        message += ProgressIndicator._symbols[self._counter]
 
         self._counter += 1
-        if self._counter >= len(self._symbols):
+        if self._counter >= len(ProgressIndicator._symbols):
             self._counter = 0
 
         if self._trailer:
