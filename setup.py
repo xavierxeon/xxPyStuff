@@ -4,11 +4,12 @@ import setuptools
 
 setuptools.setup(
     name="wapy",
-    version="0.0.4",
+    version="0.0.5",
     author="Ralf Waspe",
     author_email="ralf@waspe.de",
     license='MIT',
     packages=setuptools.find_packages(),
+    install_requires=['colorama', 'pyside2', 'wsgiref'],
     include_package_data=True,
     zip_safe=False,
 )
