@@ -9,7 +9,7 @@ setuptools.setup(
     author_email="ralf@waspe.de",
     license='MIT',
     packages=setuptools.find_packages(),
-    install_requires=['colorama', 'pyside2', 'wsgiref'],
+    install_requires=['colorama', 'pyside2'],
     include_package_data=True,
     zip_safe=False,
 )
