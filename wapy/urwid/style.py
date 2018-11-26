@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-class Style:
+class Style(str):
 
     class FgColor:
         Default = 'default'
@@ -42,11 +42,17 @@ class Style:
         UnderLine = 'underline'
 
     _counter = 0
+
+    def __new__(cls, *args, **kwargs):
+
+        Style._counter += 1
+        name = 'palette_style_{0}'.format(Style._counter)
+
+        return str.__new__(cls, name)
             
     def __init__(self, foregroundColor, backgroundColor = BgColor.Default, emphasis = Emphasis.Default):
 
-        Style._counter += 1
-        self.name = 'palette_style_{0}'.format(Style._counter)
+        str.__init__(self)
         self.foregroundColor = foregroundColor
         self.backgroundColor = backgroundColor
         self.emphasis = emphasis
@@ -54,8 +60,12 @@ class Style:
     def toTuple(self):
 
         data = list()
-        data.append(self.name)
+        data.append(self)
         data.append(self.foregroundColor)
         data.append(self.backgroundColor)
         data.append(self.emphasis)
         return tuple(data)
+
+    def stylize(self, text):
+
+        return (self, text)

@@ -2,15 +2,27 @@
 
 from .style import Style
 
-class Palette(list):
+class Palette:
 
     def __init__(self):
 
-        list.__init__(self)
+        self.styleList = list()
+        self._iterCounter = 0
 
     def addStyle(self, style):
 
-        self.append(style.toTuple())
+        self.styleList.append(style.toTuple())
 
-    
-    
+    def __iter__(self):
+
+        self._iterCounter = 0
+        return self
+
+    def __next__(self):
+
+        if self._iterCounter < len(self.styleList):
+            val = self.styleList[self._iterCounter]
+            self._iterCounter += 1
+            return val
+        else:
+            raise StopIteration
