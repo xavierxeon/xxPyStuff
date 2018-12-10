@@ -39,6 +39,10 @@ class ProgressBar:
                 message += ' {0}'.format(self.text)
 
         print('\r' + message, end = '', flush = True)
+
+    def setText(self, text):
+
+        self.text = text
     
     def clear(self, trailer):
 
