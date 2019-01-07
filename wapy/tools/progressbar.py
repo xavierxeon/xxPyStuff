@@ -11,6 +11,7 @@ class ProgressBar:
 
         self.text = None
         self._segments = 0
+        self._lastTest = -1
     
     def __call__(self, count, maxCount = None):
 
@@ -30,11 +31,16 @@ class ProgressBar:
                 self._segments = 10
             else:
                 self._segments = math.floor(percent / 10)
+                test = int(percent * 10)
+                if test == self._lastTest:
+                    return
+                else:
+                    self._lastTest = test
             
             done = '#' * self._segments
             remain = '_' * (10 - self._segments)
             message = Console.white('[{0}{1}]', True).format(done, remain)
-            message += Console.yellow(' {0:.2f} %').format(percent)
+            message += Console.yellow(' {0:.1f} %').format(percent)
             if self.text:
                 message += ' {0}'.format(self.text)
 
@@ -48,6 +54,7 @@ class ProgressBar:
 
         self.text = None
         self._segments = 0
+        self._lastTest = -1
         
         if trailer:
             print(' ' + trailer, flush = True)
