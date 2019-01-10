@@ -15,6 +15,7 @@ class Package:
 
         installer._packageList.append(self)
         self._installer = installer
+        self.name = name
         key = installer._key + '.' + subKey
 
         self._data = {
@@ -83,7 +84,13 @@ class Package:
 
     def _zipAndRemoveContent(self):
 
+        print(Console.yellow('compressing'), end = ' ')
         command = [self._installer.get7ZipExe(), 'a', 'Content.7z', 'content/*']
-        print(Console.blue('compressing'))
-        Process.execute(command, self._dataDir)
+        output = Process.execute(command, self._dataDir)
+        print(Console.green('done'))
+        print(Console.grey(output))
+
+        print(Console.yellow('clean up'), end = ' ')
         rmtree(self._dataDir + '/content')
+        print(Console.green('done'))
+

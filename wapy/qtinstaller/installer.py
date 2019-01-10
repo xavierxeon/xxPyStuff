@@ -4,7 +4,7 @@ import os, sys
 
 import xml.etree.ElementTree as xmlfile
 
-from ..tools import XMLTools, JSONSettings
+from ..tools import XMLTools, JSONSettings, Process, Console
 
 class Installer(JSONSettings):
 
@@ -15,7 +15,7 @@ class Installer(JSONSettings):
             '7zip': ''
         }
     }
-    _fileName = 'config.qtinstaller.json'
+    _fileName = 'config.json'
 
     def __init__(self, name, key, version = None):
 
@@ -29,6 +29,7 @@ class Installer(JSONSettings):
         # general data
         self._packageList = list()
         self._key = key
+        self._name = name
 
         # config data
         self._data = { 
@@ -39,11 +40,14 @@ class Installer(JSONSettings):
 
     def create(self):
 
-        self._createConfig()
         for package in self._packageList:
+            print(Console.blue('Package: ') + package.name)
             package._createMeta()
             package._startCopyFiles()
             package._zipAndRemoveContent()
+
+        self._createConfig()        
+        self._createInstaller()
 
     def setTitle(self, title):
 
@@ -83,7 +87,7 @@ class Installer(JSONSettings):
             xmlfile.SubElement(root, key).text = value     
 
         if self._remoteRepoList:
-            repos = xmlfile.SubElement(root, 'RemoteRepositories');
+            repos = xmlfile.SubElement(root, 'RemoteRepositories')
             for repoUrl in self._remoteRepoList:
                 repo = xmlfile.SubElement(repos, 'Repository')
                 xmlfile.SubElement(repo, 'Url').text = repoUrl               
@@ -93,3 +97,11 @@ class Installer(JSONSettings):
         with open('installer/config/config.xml', 'wb') as outfile:
             content = xmlfile.tostring(root, encoding='utf8')
             outfile.write(content)
+
+    def _createInstaller(self):
+
+        print(Console.blue('create installer'), end = ' ')
+        command = [self.data['executables']['qt_installer'], '-c', 'config/config.xml', '-p', 'packages', self._name + '.exe']
+        output = Process.execute(command, 'installer')
+        print(Console.green('done'))
+        print(Console.grey(output))
