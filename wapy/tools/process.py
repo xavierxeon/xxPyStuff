@@ -11,7 +11,7 @@ class Process:
         if workdir:
             os.chdir(workdir)
 
-        with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd = workdir) as process:
+        with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as process:
             output, error = process.communicate()
 
         os.chdir(current)

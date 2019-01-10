@@ -1,18 +1,32 @@
 #!/usr/bin/env python3
 
-import os
+import os, sys
 
 import xml.etree.ElementTree as xmlfile
 
-from .lib import Settings
-from ..tools import XMLTools
+from ..tools import XMLTools, JSONSettings
 
-class Installer:
+class Installer(JSONSettings):
+
+    _template = {
+        'executables': {
+            'qt_installer': '',
+            'repogen': '', 
+            '7zip': ''
+        }
+    }
+    _fileName = 'config.qtinstaller.json'
 
     def __init__(self, name, key, version = None):
 
+        JSONSettings.__init__(self, Installer._fileName, Installer._template)
+        try:
+            self.load()
+        except JSONSettings.SettingsError as message:
+            print(message)
+            sys.exit(1)
+
         # general data
-        self._installerSettings = Settings()
         self._packageList = list()
         self._key = key
 
@@ -54,6 +68,10 @@ class Installer:
     def addRemoteRepository(self, url):
 
         self._remoteRepoList.append(url)
+
+    def get7ZipExe(self):
+
+        return self.data['executables']['7zip']
 
     def _createConfig(self):
 

@@ -2,31 +2,61 @@
 
 import os
 
-import xml.etree.ElementTree as xmlfile
+from fnmatch import fnmatch
 
-from .lib import Settings
-from ..tools import XMLTools
+import xml.etree.ElementTree as xmlfile
+from shutil import copy, rmtree
+
+from ..tools import XMLTools, Process, Console
 
 class Package:
     
     def __init__(self, installer, name, subKey, version = None):
 
         installer._packageList.append(self)
-        self._key = installer._key + '.' + subKey
+        self._installer = installer
+        key = installer._key + '.' + subKey
 
         self._data = {
             'DisplayName': name,
-            'Name': self._key,
+            'Name': key,
             'Version': version if version else '1.0',
             'Default': 'true'
         }
 
-        self._metaDir = 'installer/packages/' + self._key + '/meta'
-        self._dataDir = 'installer/packages/' + self._key + '/data'
+        self._metaDir = 'installer/packages/' + key + '/meta'
+        self._dataDir = 'installer/packages/' + key + '/data'
 
     def copyFiles(self, targetDir):
 
         raise NotImplementedError()        
+
+    @staticmethod
+    def copyWildCard(sourceDir, wildcard, targetDir, progressBar = None, recursive = False):
+        
+        copyList = dict()
+        
+        def fillCoppyListRecursive(sourceDir, targetDir):
+            os.makedirs(targetDir, exist_ok = True)
+            for entry in os.scandir(sourceDir):
+                if recursive and entry.is_dir():
+                    fillCoppyListRecursive(entry.path, targetDir + '/' + entry.name)
+                    continue
+                if entry.is_file() and  fnmatch(entry.name, wildcard):
+                    copyList[entry.path] = targetDir
+
+        fillCoppyListRecursive(sourceDir, targetDir)
+
+        count = len(copyList)
+        index = 0
+
+        for fileName, targetDir in copyList.items():
+            index += 1
+            if progressBar:
+                progressBar(index, count)
+            else:
+                print(fileName, targetDir)           
+            copy(fileName, targetDir)           
 
     def setDefault(self, default):
 
@@ -53,4 +83,7 @@ class Package:
 
     def _zipAndRemoveContent(self):
 
-        pass
+        command = [self._installer.get7ZipExe(), 'a', 'Content.7z', 'content/*']
+        print(Console.blue('compressing'))
+        Process.execute(command, self._dataDir)
+        rmtree(self._dataDir + '/content')

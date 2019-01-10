@@ -50,7 +50,7 @@ class ProgressBar:
 
         self.text = text
     
-    def clear(self, trailer):
+    def clear(self, trailer = None):
 
         self.text = None
         self._segments = 0
