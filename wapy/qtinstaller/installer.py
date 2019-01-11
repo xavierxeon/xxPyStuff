@@ -116,8 +116,8 @@ class Installer(JSONSettings):
     def _createInstaller(self):
 
         name = self._name
-        if 'MaintenanceToolName' in self.data:
-            name = self.data['MaintenanceToolName']
+        if 'MaintenanceToolName' in self._configData:
+            name = self._configData['MaintenanceToolName']
 
         if self._remoteRepoList:
             p = SimpleProgresIndicator('create online installer')
