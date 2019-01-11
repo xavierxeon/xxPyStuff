@@ -19,7 +19,7 @@ class Package:
         self.name = name 
         self._key = installer._key + '.' + subKey
 
-        self._data = {
+        self._metaData = {
             'Name': self._key,
             'Version': version if version else '1.0',
             'Default': 'true',
@@ -64,16 +64,34 @@ class Package:
 
     def setDefault(self, default):
 
-        self._data['Default'] = 'true' if default else 'false'
+        self._metaData['Default'] = 'true' if default else 'false'
 
     def setDisplayName(self, name):
 
-        self._data['DisplayName']  = name
+        self._metaData['DisplayName']  = name
 
     def getContentDirName(self):
 
         dirName = self.name.replace(' ', '')
         return dirName
+
+    def updateRepository(self):
+
+        p = SimpleProgresIndicator('update repository ' + self.name)
+        command = [self._installer.data['executables']['repogen'], '-p', 'packages', '-i', self._key, '--update', 'repository']
+        output =  Process.execute(command, 'installer')
+
+        del p
+        if output:
+            print(Console.grey(output))
+
+
+    def create(self):
+
+        self._createMeta()            
+        self._startCopyFiles()
+        self._zipContent()
+        self._cleanup()
 
     def _createMeta(self):
 
@@ -81,7 +99,7 @@ class Package:
 
         root = xmlfile.Element('Package')
 
-        for key, value in self._data.items():
+        for key, value in self._metaData.items():
             xmlfile.SubElement(root, key).text = value    
 
         if self._script:
@@ -112,3 +130,18 @@ class Package:
 
         SimpleProgresIndicator('clean up')
         rmtree(self._dataDir + '/' + self.getContentDirName())
+
+class OnlineDummyPackage(Package):
+
+    def __init__(self, installer):
+
+        Package.__init__(self, installer, installer._name, '')
+        self._key = installer._key
+        self.setDisplayName(installer._name)
+        del self._metaData['Name']
+
+    def copyFiles(self, targetDir):        
+
+        with open(targetDir + '/Readme.txt', 'w') as outfile:
+            outfile.write('\n')
+
