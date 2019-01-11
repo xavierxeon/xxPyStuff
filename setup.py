@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="wapy",
-    version="0.0.5",
+    version="0.0.6",
     author="Ralf Waspe",
     author_email="rwaspe@me.com",
     description="A small example package",

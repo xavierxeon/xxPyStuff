@@ -16,4 +16,8 @@ class Process:
 
         os.chdir(current)
 
-        return output.decode('ascii')
+        if error:
+            return error.decode('ascii')
+        else:
+            return output.decode('ascii')
+            

@@ -64,3 +64,12 @@ class ProgressIndicator:
         self._prevLength = length
 
         return message
+
+class SimpleProgresIndicator:
+
+    def __init__(self, message):
+
+        print(Console.yellow(message), end = ' ')
+
+    def __del__(self):
+        print(Console.green('done'))

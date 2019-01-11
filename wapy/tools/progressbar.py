@@ -60,3 +60,14 @@ class ProgressBar:
             print(' ' + trailer, flush = True)
         else:
             print('', flush = True)
+
+class SimpleProgressBar(ProgressBar):
+
+    def __init__(self, message):
+
+        ProgressBar.__init__(self)
+        self.setText(message)
+
+    def __del__(self):
+        self.clear(Console.green('done'))
+        

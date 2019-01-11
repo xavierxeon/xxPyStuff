@@ -4,7 +4,7 @@ import os, sys
 
 import xml.etree.ElementTree as xmlfile
 
-from ..tools import XMLTools, JSONSettings, Process, Console
+from ..tools import XMLTools, JSONSettings, Process, Console, SimpleProgresIndicator
 
 class Installer(JSONSettings):
 
@@ -42,11 +42,12 @@ class Installer(JSONSettings):
 
         for package in self._packageList:
             print(Console.blue('Package: ') + package.name)
-            package._createMeta()
-            package._startCopyFiles()
-            package._zipAndRemoveContent()
+            package._createMeta()            
+            #package._startCopyFiles()
+            #package._zipContent()
+            #package._cleanup()
 
-        self._createConfig()        
+        self._createConfig()   
         self._createInstaller()
 
     def setTitle(self, title):
@@ -100,8 +101,11 @@ class Installer(JSONSettings):
 
     def _createInstaller(self):
 
-        print(Console.blue('create installer'), end = ' ')
-        command = [self.data['executables']['qt_installer'], '-c', 'config/config.xml', '-p', 'packages', self._name + '.exe']
-        output = Process.execute(command, 'installer')
-        print(Console.green('done'))
-        print(Console.grey(output))
+        p = SimpleProgresIndicator('create installer')
+        command = [self.data['executables']['qt_installer'], '--offline-only', '-c', 'config/config.xml', '-p', 'packages', self._name + '.exe']
+        output =  Process.execute(command, 'installer')
+
+        del p
+        if output:
+            print(Console.grey(output))
+

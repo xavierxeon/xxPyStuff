@@ -3,11 +3,12 @@
 import os
 
 from fnmatch import fnmatch
+from datetime import date
 
 import xml.etree.ElementTree as xmlfile
 from shutil import copy, rmtree
 
-from ..tools import XMLTools, Process, Console
+from ..tools import XMLTools, Process, Console, SimpleProgresIndicator
 
 class Package:
     
@@ -15,25 +16,27 @@ class Package:
 
         installer._packageList.append(self)
         self._installer = installer
-        self.name = name
-        key = installer._key + '.' + subKey
+        self.name = name 
+        self._key = installer._key + '.' + subKey
 
         self._data = {
-            'DisplayName': name,
-            'Name': key,
+            'Name': self._key,
             'Version': version if version else '1.0',
-            'Default': 'true'
+            'Default': 'true',
+            'ReleaseDate': str(date.today())
         }
 
-        self._metaDir = 'installer/packages/' + key + '/meta'
-        self._dataDir = 'installer/packages/' + key + '/data'
+        self._script = None
+
+        self._metaDir = 'installer/packages/' + self._key + '/meta'
+        self._dataDir = 'installer/packages/' + self._key + '/data'
 
     def copyFiles(self, targetDir):
 
         raise NotImplementedError()        
 
     @staticmethod
-    def copyWildCard(sourceDir, wildcard, targetDir, progressBar = None, recursive = False):
+    def copyWildCard(sourceDir, targetDir, wildcard, progressBar = None, recursive = False):
         
         copyList = dict()
         
@@ -63,6 +66,15 @@ class Package:
 
         self._data['Default'] = 'true' if default else 'false'
 
+    def setDisplayName(self, name):
+
+        self._data['DisplayName']  = name
+
+    def getContentDirName(self):
+
+        dirName = self.name.replace(' ', '')
+        return dirName
+
     def _createMeta(self):
 
         os.makedirs(self._metaDir, exist_ok = True)
@@ -70,7 +82,11 @@ class Package:
         root = xmlfile.Element('Package')
 
         for key, value in self._data.items():
-            xmlfile.SubElement(root, key).text = value     
+            xmlfile.SubElement(root, key).text = value    
+
+        if self._script:
+             xmlfile.SubElement(root, 'Script').text = self._script.name    
+             self._script.save(self._metaDir)
 
         XMLTools.indent(root)        
         with open(self._metaDir + '/package.xml', 'wb') as outfile:
@@ -79,18 +95,20 @@ class Package:
 
     def _startCopyFiles(self):
 
-        os.makedirs(self._dataDir + '/content', exist_ok = True)
-        self.copyFiles(os.getcwd() + '/' + self._dataDir + '/content')
+        os.makedirs(self._dataDir + '/' + self.getContentDirName(), exist_ok = True)
+        self.copyFiles(os.getcwd() + '/' + self._dataDir + '/' + self.getContentDirName())
 
-    def _zipAndRemoveContent(self):
+    def _zipContent(self):
 
-        print(Console.yellow('compressing'), end = ' ')
-        command = [self._installer.get7ZipExe(), 'a', 'Content.7z', 'content/*']
+        p = SimpleProgresIndicator('compressing')            
+        command = [self._installer.get7ZipExe(), 'a', 'Content.7z', self.getContentDirName() + '/*']
         output = Process.execute(command, self._dataDir)
-        print(Console.green('done'))
-        print(Console.grey(output))
 
-        print(Console.yellow('clean up'), end = ' ')
-        rmtree(self._dataDir + '/content')
-        print(Console.green('done'))
+        del p
+        if output:
+            print(Console.grey(output))
 
+    def _cleanup(self):
+
+        SimpleProgresIndicator('clean up')
+        rmtree(self._dataDir + '/' + self.getContentDirName())
