@@ -43,9 +43,9 @@ class Installer(JSONSettings):
         for package in self._packageList:
             print(Console.blue('Package: ') + package.name)
             package._createMeta()            
-            #package._startCopyFiles()
-            #package._zipContent()
-            #package._cleanup()
+            package._startCopyFiles()
+            package._zipContent()
+            package._cleanup()
 
         self._createConfig()   
         self._createInstaller()
