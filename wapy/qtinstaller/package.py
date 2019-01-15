@@ -10,18 +10,21 @@ from shutil import copy, rmtree
 
 from ..tools import XMLTools, Process, Console, SimpleProgresIndicator
 
+from .version  import Version
+
 class Package:
     
-    def __init__(self, installer, name, subKey, version = None):
+    def __init__(self, installer, name, subKey, baseVersion):
 
         installer._packageList.append(self)
         self._installer = installer
         self.name = name 
-        self._key = installer._key + '.' + subKey
+        self._key = installer._key if not subKey else installer._key + '.' + subKey
+
+        self._version = Version(installer, self._key, baseVersion)
 
         self._metaData = {
             'Name': self._key,
-            'Version': version if version else '1.0',
             'Default': 'true',
             'ReleaseDate': str(date.today())
         }
@@ -98,6 +101,7 @@ class Package:
         os.makedirs(self._metaDir, exist_ok = True)
 
         root = xmlfile.Element('Package')
+        xmlfile.SubElement(root, 'Version').text = self._version.update()        
 
         for key, value in self._metaData.items():
             xmlfile.SubElement(root, key).text = value    
@@ -135,7 +139,7 @@ class OnlineDummyPackage(Package):
 
     def __init__(self, installer):
 
-        Package.__init__(self, installer, installer._name, '')
+        Package.__init__(self, installer, installer._name, None, '1.0')
         self._key = installer._key
         self.setDisplayName(installer._name)
         del self._metaData['Name']

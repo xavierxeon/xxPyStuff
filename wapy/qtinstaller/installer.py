@@ -7,6 +7,7 @@ from shutil import copy
 
 from ..tools import XMLTools, JSONSettings, Process, Console, SimpleProgresIndicator
 from .package import OnlineDummyPackage
+from .version import Version
 
 class Installer(JSONSettings):
 
@@ -19,7 +20,7 @@ class Installer(JSONSettings):
     }
     _fileName = 'config.json'
 
-    def __init__(self, name, key, version = None):
+    def __init__(self, name, key, baseVersion):
 
         JSONSettings.__init__(self, Installer._fileName, Installer._template)
         try:
@@ -33,10 +34,11 @@ class Installer(JSONSettings):
         self._key = key
         self._name = name
 
+        self._version = Version(self, self._key, baseVersion)
+
         # config data
         self._configData = { 
-            'Name': name,
-            'Version': version if version else '1.0'
+            'Name': name
         }
         self._remoteRepoList = list()
 
@@ -97,6 +99,7 @@ class Installer(JSONSettings):
         os.makedirs('installer/config', exist_ok = True)
 
         root = xmlfile.Element('Installer')
+        xmlfile.SubElement(root, 'Version').text = self._version.update()
 
         for key, value in self._configData.items():
             xmlfile.SubElement(root, key).text = value     
