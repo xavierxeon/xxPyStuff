@@ -29,11 +29,12 @@ class Installer(JSONSettings):
             print(message)
             sys.exit(1)
 
+        self.verbose = False
+
         # general data
         self._packageList = list()
         self._key = key
         self._name = name
-
         self._version = Version(self, self._key, baseVersion)
 
         # config data
@@ -132,6 +133,6 @@ class Installer(JSONSettings):
         output =  Process.execute(command, 'installer')
 
         del p
-        if output:
+        if output and self.verbose:
             print(Console.grey(output))
 

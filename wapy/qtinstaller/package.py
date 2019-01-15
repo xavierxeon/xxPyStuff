@@ -17,10 +17,11 @@ class Package:
     def __init__(self, installer, name, subKey, baseVersion):
 
         installer._packageList.append(self)
+        self.verbose = False
+
         self._installer = installer
         self.name = name 
         self._key = installer._key if not subKey else installer._key + '.' + subKey
-
         self._version = Version(installer, self._key, baseVersion)
 
         self._metaData = {
@@ -85,9 +86,8 @@ class Package:
         output =  Process.execute(command, 'installer')
 
         del p
-        if output:
+        if output and self.verbose:
             print(Console.grey(output))
-
 
     def create(self):
 
@@ -127,7 +127,7 @@ class Package:
         output = Process.execute(command, self._dataDir)
 
         del p
-        if output:
+        if self.verbose:
             print(Console.grey(output))
 
     def _cleanup(self):
