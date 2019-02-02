@@ -6,14 +6,14 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="wapy",
+    name="xxpystuff",
     version="0.0.6",
     author="Ralf Waspe",
     author_email="rwaspe@me.com",
     description="A small example package",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/xavierxeon/PythonPackage",
+    url="https://github.com/xavierxeon/xxPyStuff",
     license='MIT',
     packages=setuptools.find_packages(),
     install_requires=['colorama', 'pyside2', 'urwid'],
