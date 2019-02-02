@@ -72,3 +72,18 @@ class Console:
     def white(message, bold = False):
         Console._init()
         return Console._write(message, bold, Console.Color.White)  
+
+    @staticmethod
+    def qtFriendly(message):
+        message = message.replace(Console.Color.Clear, '</font>')
+        message = message.replace(Console.Color.Bold, '')
+        message = message.replace(Console.Color.Grey, '<font style="color:Grey">')
+        message = message.replace(Console.Color.Red, '<font style="color:Red">')
+        message = message.replace(Console.Color.Green, '<font style="color:Green">')
+        message = message.replace(Console.Color.Yellow, '<font style="color:Yellow">')
+        message = message.replace(Console.Color.Blue, '<font style="color:Blue">')
+        message = message.replace(Console.Color.Magenta, '<font style="color:Magenta">')
+        message = message.replace(Console.Color.Cyan, '<font style="color:Cyan">')
+        message = message.replace(Console.Color.White, '<font style="color:White">')
+
+        return message
