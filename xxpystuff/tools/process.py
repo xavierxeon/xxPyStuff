@@ -10,7 +10,9 @@ class Process:
         self.workDir = None
         self.outputFunction = None
         self.errorFunction = None
+
         self._command = command
+        self._handle = None
 
     def start(self, *argList):
 
@@ -22,15 +24,24 @@ class Process:
         for arg in argList:
             content.append(str(arg))
 
-        with Popen(content, stdout = PIPE, stderr = PIPE, stdin = PIPE, bufsize = 1, universal_newlines = True) as process:
-            while process.poll() is None:
-                self._capture(process.stdout, self.outputFunction)
-                self._capture(process.stderr, self.errorFunction)
+        self._handle = Popen(content, stdout = PIPE, stderr = PIPE, stdin = PIPE, bufsize = 1, universal_newlines = True)
+        while self._handle.poll() is None:
+            self._capture(self._handle.stdout, self.outputFunction)
+            self._capture(self._handle.stderr, self.errorFunction)
                     
-            self._capture(process.stdout, self.outputFunction)
-            self._capture(process.stdout, self.errorFunction)
+        self._capture(self._handle.stdout, self.outputFunction)
+        self._capture(self._handle.stdout, self.errorFunction)
 
+        self.stop()
         os.chdir(current)
+
+    def stop(self):
+
+        if not self._handle:
+            return
+
+        del self._handle
+        self._handle = None
 
     def write(self, text):
 
