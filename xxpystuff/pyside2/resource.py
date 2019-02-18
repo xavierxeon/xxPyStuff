@@ -39,7 +39,7 @@ class Resource(list):
         if 'Windows' == platform.system():
             rccExe = path + '\\pyside2-rcc.exe'
         else:
-            return
+            rccExe = path + '/pyside2-rcc'
 
         if not os.path.exists(rccExe):
             return
