@@ -1,4 +1,4 @@
-#!/Usr/bin/env python3
+#!/usr/bin/env python3
 
 import os, subprocess, platform
 import xml.etree.ElementTree as xmlfile
@@ -32,7 +32,8 @@ class Resource(list):
             outfile.write('<!DOCTYPE RCC>\n')
             outfile.write(content.decode() + '\n')
 
-    def makePythonFile(self, rcFile, pythonFile):
+    @staticmethod
+    def makePythonFile(rcFile, pythonFile):
 
         import PySide2.QtCore
         path = os.path.dirname(PySide2.QtCore.__file__)

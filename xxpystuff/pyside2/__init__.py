@@ -2,3 +2,4 @@
 
 from .logwidget import LogWidget
 from .resource import Resource
+from .uifile import UiFile
