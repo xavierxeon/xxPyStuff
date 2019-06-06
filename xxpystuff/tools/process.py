@@ -30,7 +30,7 @@ class Process:
             self._capture(self._handle.stderr, self.errorFunction)
                     
         self._capture(self._handle.stdout, self.outputFunction)
-        self._capture(self._handle.stdout, self.errorFunction)
+        self._capture(self._handle.stderr, self.errorFunction)
 
         self.stop()
         os.chdir(current)
