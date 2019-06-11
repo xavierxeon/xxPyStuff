@@ -15,38 +15,22 @@ class Process:
         self._statusIndicator = statusIndicator
         self._handle = None
 
-    def start(self, *argList):
-
-        current = os.getcwd()
-        if self.workDir:
-            os.chdir(self.workDir)
+    def startWithArguments(self, *arguments):
 
         content = [ self._command ]
-        for arg in argList:
+        for arg in arguments:
             content.append(str(arg))
 
-        self._handle = Popen(content, stdout = PIPE, stderr = PIPE, stdin = PIPE, bufsize = 1, universal_newlines = True)
-        success = False
-        while True:
-            try:
-                output, error = self._handle.communicate(None, 0.2)
+        self._executeInternal(content)
 
-                # timeout not reached, therefore process is finished
-                if output and self.outputFunction:
-                    self.outputFunction(output)
-                if error and self.errorFunction:
-                    self.errorFunction(error)
-                if not error:
-                    success = True
-                break 
-            except TimeoutExpired:
-                if self._statusIndicator:
-                    self._statusIndicator.busy()
+    def start(self, argList = None):
 
-        self.stop()
-        os.chdir(current)
+        content = [ self._command ]
+        if argList:
+            for arg in argList:
+                content.append(str(arg))
 
-        return success
+        self._executeInternal(content)
 
     def stop(self):
 
@@ -79,13 +63,31 @@ class Process:
         else:
             return output.decode('ascii')
             
-    def _capture(self, pipe, callBack):
-        
-        if not callBack:
-            return
+    def _executeInternal(self, content):
 
+        current = os.getcwd()
+        if self.workDir:
+            os.chdir(self.workDir)
+
+        self._handle = Popen(content, stdout = PIPE, stderr = PIPE, stdin = PIPE, bufsize = 1, universal_newlines = True)
+        success = False
         while True:
-            output = pipe.read()
-            if not output:
-                return
-            callBack(output)
+            try:
+                output, error = self._handle.communicate(None, 0.2)
+
+                # timeout not reached, therefore process is finished
+                if output and self.outputFunction:
+                    self.outputFunction(output) #pylint: disable=not-callable
+                if error and self.errorFunction:
+                    self.errorFunction(error) #pylint: disable=not-callable
+                if not error:
+                    success = True
+                break 
+            except TimeoutExpired:
+                if self._statusIndicator:
+                    self._statusIndicator.busy()
+
+        self.stop()
+        os.chdir(current)
+
+        return success
