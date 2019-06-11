@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os, subprocess, platform
+import sys, os, subprocess, platform
 from pathlib import Path
 
 class UiFile:
@@ -8,14 +8,23 @@ class UiFile:
     @staticmethod
     def makePythonFile(uiFile, pythonFile):
 
-        import PySide2.QtCore
-        path = os.path.dirname(PySide2.QtCore.__file__)
-        if 'Windows' == platform.system():
-            uiExe = path + '\\pyside2-uic.exe'
-        else:
-            uiExe = str(Path.home()) + '/.local/bin/pyside2-uic'
+        def findUiExe():
 
-        if not os.path.exists(uiExe):
+            if 'Windows' == platform.system():
+                for path in sys.path:
+                    if not 'site-packages' in path: 
+                        continue
+                    path = path.replace('site-packages', 'Scripts')
+                    if not os.path.exists(path):
+                        continue
+                    return path + '\\pyside2-uic.exe'
+            else:
+                return str(Path.home()) + '/.local/bin/pyside2-uic'
+
+            return None
+
+        uiExe = findUiExe()
+        if not uiExe or not os.path.exists(uiExe):
             print('can not find file ui exe:', uiExe)
             return
 
