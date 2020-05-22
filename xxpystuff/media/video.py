@@ -5,14 +5,13 @@ import os, sys, cv2
 
 class Video:
 
-   def __init__(self, fileName):
+   def __init__(self, fileName, fps = 30, targetSize =  (1920, 1080)):
 
       if not fileName.endswith('.mp4'):
          raise ValueError
 
       codec = cv2.VideoWriter_fourcc(*'mp4v')
-      fps = 30
-      self._targetSize = (1920, 1080)
+      self._targetSize = targetSize
       self._video = cv2.VideoWriter(fileName, codec, fps, self._targetSize)      
 
 
@@ -44,12 +43,12 @@ class Video:
 
       video = Video(videoName)
 
-      count = len(imageList)
-      for index in range(count):
+      total = len(imageList)
+      for index in range(total):
          if statusindicator:
-            statusindicator.progress(index, count)
+            statusindicator.progress(index, total)
          imagePath = imageList[index]
-         video.writeImage(imagePath)
+         video.addImage(imagePath)
 
       if statusindicator:
          statusindicator.endProgress()
@@ -60,23 +59,46 @@ class Video:
       if not os.path.exists(videoName):
          return
 
-      os.makedirs(imageDirectory)
+      imageDirectory = os.path.abspath(imageDirectory)
+      if not imageDirectory.endswith('/'):
+         imageDirectory = imageDirectory + '/'
+      os.makedirs(imageDirectory, exist_ok = True)
 
       if statusindicator:
          statusindicator.setProgressText('creating image sequence')
 
       video = cv2.VideoCapture(videoName)
-      width = video.get('CV_CAP_PROP_FRAME_WIDTH')
-      height = video.get('CV_CAP_PROP_FRAME_HEIGHT')
 
-      """
+      total = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
+      def calcPadding():
+         test = 10
+         padding = 1
+         while test < total:
+            test *= 10
+            padding += 1
+         return padding
+
+      padding = calcPadding()
+      index = 1
+
       while(video.isOpened()):
-         ret, frame = video.read()
-      """
+         grabbed, frame = video.read()
+         if not grabbed:
+            break         
+         if statusindicator:
+            statusindicator.progress(index, total)
+         num = str(index)
+         index += 1
+         while len(num) < padding:
+            num = '0' + num
+         name = imageDirectory + 'image_' + num + '.png'
+         try:
+            cv2.imwrite(name, frame) 
+         except:
+            pass
+
       if statusindicator:
          statusindicator.endProgress()
-
-      print(width, height)
 
 class VideoBlend(Video):
 

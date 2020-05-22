@@ -18,7 +18,7 @@ setuptools.setup(
     url="https://github.com/xavierxeon/xxPyStuff",
     license='MIT',
     packages=packages,
-    install_requires=['colorama', 'pyside2', 'urwid'],
+    install_requires=['colorama', 'pyside2', 'opencv-python'],
     include_package_data=True,
     zip_safe=False,
 )
