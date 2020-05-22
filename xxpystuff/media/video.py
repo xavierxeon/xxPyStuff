@@ -20,10 +20,63 @@ class Video:
 
       self._video.release()
 
-   def writeImage(self, imageData):
+   def addImage(self, imagePath):
 
+      imageData = cv2.imread(imagePath)
       image = cv2.resize(imageData, self._targetSize, interpolation = cv2.INTER_LANCZOS4)
       self._video.write(image)
+
+   @staticmethod
+   def fromDirectory(imageDirectory, videoName, statusindicator = None):
+
+      imageList = list()
+
+      for entry in os.scandir(imageDirectory):
+         if entry.name.endswith('.png'):
+               imageList.append(entry.path)
+
+      imageList.sort()
+      if not imageList:
+         return
+
+      if statusindicator:
+         statusindicator.setProgressText('creating video')
+
+      video = Video(videoName)
+
+      count = len(imageList)
+      for index in range(count):
+         if statusindicator:
+            statusindicator.progress(index, count)
+         imagePath = imageList[index]
+         video.writeImage(imagePath)
+
+      if statusindicator:
+         statusindicator.endProgress()
+
+   @staticmethod
+   def toDirectory(imageDirectory, videoName, statusindicator = None):
+
+      if not os.path.exists(videoName):
+         return
+
+      os.makedirs(imageDirectory)
+
+      if statusindicator:
+         statusindicator.setProgressText('creating image sequence')
+
+      video = cv2.VideoCapture(videoName)
+      width = video.get('CV_CAP_PROP_FRAME_WIDTH')
+      height = video.get('CV_CAP_PROP_FRAME_HEIGHT')
+
+      """
+      while(video.isOpened()):
+         ret, frame = video.read()
+      """
+      if statusindicator:
+         statusindicator.endProgress()
+
+      print(width, height)
 
 class VideoBlend(Video):
 
@@ -55,12 +108,12 @@ class VideoBlend(Video):
       self._lastImage = imageData
 
    @staticmethod
-   def fromJPGDirectory(imageDirectory, videoName, statusindicator = None):
+   def fromDirectory(imageDirectory, videoName, statusindicator = None):
 
       imageList = list()
 
       for entry in os.scandir(imageDirectory):
-         if entry.name.endswith('.jpg'):
+         if entry.name.endswith('.png'):
                imageList.append(entry.path)
 
       imageList.sort()
@@ -78,7 +131,8 @@ class VideoBlend(Video):
             statusindicator.progress(index, count)
          imagePath = imageList[index]
          imageData = cv2.imread(imagePath)
-         video.addImage(imageData)
+         image = cv2.resize(imageData, video._targetSize, interpolation = cv2.INTER_LANCZOS4)
+         video._video.write(image)
 
       if statusindicator:
          statusindicator.endProgress()
