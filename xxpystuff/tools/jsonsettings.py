@@ -63,7 +63,7 @@ class JSONSettings:
                 target[key] = value
                 madeChanges = True
             #recurse into sub dictionaries
-                if isinstance(value, dict):
+            if isinstance(value, dict):
                 if self._sanityCheck(source[key], target[key]):
                     madeChanges = True
             
