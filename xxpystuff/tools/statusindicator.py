@@ -9,9 +9,11 @@ class UserInteraction:
     def __init__(self, title):
 
         self.title = title
+        self.location = None
         self.choices = dict()
+        self.content = list()
 
-    def addChoicce(self, key, text):
+    def addChoice(self, key, text):
 
         self.choices[key] = text
 
@@ -19,7 +21,7 @@ class StatusIndicatorAbstract:
     
     def __init__(self):
 
-        self._progressText = None
+        self._progressText = str()
 
     def setProgressText(self, text):
 
@@ -131,7 +133,14 @@ class StatusIndicatorConsole(StatusIndicatorAbstract):
 
     def askUser(self, userInteraction):
 
-        print(userInteraction.title)
+        if userInteraction.location:
+            print(Console.yellow(userInteraction.title) + ': ' + userInteraction.location)
+        else:
+            print(Console.yellow(userInteraction.title))
+        
+        for text in userInteraction.content:
+            print('* ' + text)
+    
         for key, text in userInteraction.choices.items():
             print('type "{0}": {1}'.format(Console.yellow(key), text))
         userInput = input('your choice: ')

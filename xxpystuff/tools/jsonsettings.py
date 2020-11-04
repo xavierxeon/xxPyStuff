@@ -10,10 +10,11 @@ class JSONSettings:
 
         pass
 
-    def __init__(self, fileName, template):
+    def __init__(self, fileName, template, removeUnknownKeys = True):
 
         self._fileName = fileName
         self._template = template
+        self._removeUnknownKeys = removeUnknownKeys
         self.data = dict()
 
     def load(self, abortIfFileNotExist = True):
@@ -28,7 +29,8 @@ class JSONSettings:
             with open(self._fileName, 'r') as infile:
                 self.data = json.load(infile)
 
-            self._sanityCheck()  
+            if self._sanityCheck(self._template, self.data):
+                self.save()
 
     def save(self):
 
@@ -40,32 +42,30 @@ class JSONSettings:
         message = Console.red('{0} in settings file ').format(message) + Console.magenta('{0}').format(self._fileName)
         raise JSONSettings.SettingsError(message) 
 
-    def _sanityCheck(self):
+    def _sanityCheck(self, source, target):
 
-        def compileKeyList(dictionary):
+        madeChanges = False
 
-            keyList = list()
-            for key, value in dictionary.items():
-                keyList.append(key)
+        #remove extra entries
+        if self._removeUnknownKeys:
+            removeKeys = list()
+            for key in target.keys():
+                if not key in source:
+                    removeKeys.append(key)
+
+            for key in removeKeys:
+                del target[key]
+                madeChanges = True
+
+        # add missing entries
+        for key, value in source.items():
+            if not key in target:
+                target[key] = value
+                madeChanges = True
+            #recurse into sub dictionaries
                 if isinstance(value, dict):
-                    for subKey in compileKeyList(value):
-                        keyList.append(key + '/' + subKey)
-            return keyList
-
-        templateKeyList = compileKeyList(self._template)
-        dataKeyList = compileKeyList(self.data)
-
-        missingList = list()
-
-        for key in templateKeyList:
-            if not key in dataKeyList:
-                missingList.append(key)
-
-        if missingList:
-            if len(missingList) == 1:
-                missing = missingList[0]
-            elif len(missingList) > 1:
-                missing = '", "'.join(missingList)
-            self._abort('entry "{0}" is missing'.format(missing))
+                if self._sanityCheck(source[key], target[key]):
+                    madeChanges = True
             
+        return madeChanges
                        
