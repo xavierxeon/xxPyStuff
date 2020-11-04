@@ -1,6 +1,5 @@
 #!/bin/bash
 
-pip3 install scikit-build
-sudo apt install cmake
+#/usr/bin/env python3 -m pip install --user -e . 
 sudo /usr/bin/env python3 -m pip install -e . 
 

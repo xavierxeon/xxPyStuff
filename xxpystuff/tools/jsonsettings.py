@@ -62,7 +62,7 @@ class JSONSettings:
                 missingList.append(key)
 
         if missingList:
-            if len(missingList) is 1:
+            if len(missingList) == 1:
                 missing = missingList[0]
             elif len(missingList) > 1:
                 missing = '", "'.join(missingList)
