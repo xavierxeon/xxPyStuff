@@ -34,7 +34,7 @@ class DebugServer(Application):
             print(Console.red('no POST application found'))
             return self._notFound(responseFunction)
 
-        if '/' is request:
+        if '/' == request:
             fileName = self._rootDir + '/' + self.indexFile 
         else:
             fileName = self._rootDir + request
