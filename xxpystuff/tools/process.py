@@ -88,10 +88,7 @@ class Process:
       while True:
          try:
             self.output, self.error = self._handle.communicate(None, 0.2)
-
-            # timeout not reached, therefore process is finished
-            if output and self.outputFunction:
-               success = True
+            success = True
             break 
          except TimeoutExpired:
             if self._statusIndicator:
