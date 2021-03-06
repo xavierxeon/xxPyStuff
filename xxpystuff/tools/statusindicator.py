@@ -69,6 +69,10 @@ class StatusIndicatorConsole(StatusIndicatorAbstract):
 
             self._indicator.progress(count, maxCount)
 
+      def busy(self):
+
+         self._indicator.busy()
+
     def __init__(self):
 
         StatusIndicatorAbstract.__init__(self)
@@ -89,6 +93,8 @@ class StatusIndicatorConsole(StatusIndicatorAbstract):
         self._segments += 1
         if self._segments >= 10:
             self._segments = 0
+
+      message += Console.yellow(' ?.? %')
 
         if self._progressText:
             message += ' {0}'.format(self._progressText)
@@ -117,7 +123,6 @@ class StatusIndicatorConsole(StatusIndicatorAbstract):
 
         print('\r' + message, end = '', flush = True)            
 
-
     def endProgress(self, trailer = None):
 
         self.progress(10, 10)
@@ -143,5 +148,6 @@ class StatusIndicatorConsole(StatusIndicatorAbstract):
     
         for key, text in userInteraction.choices.items():
             print('type "{0}": {1}'.format(Console.yellow(key), text))
+
         userInput = input('your choice: ')
         return userInput
