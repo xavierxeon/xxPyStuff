@@ -2,17 +2,9 @@
 
 import sys
 
-# pylint: disable=E0611
-from PySide2.QtWidgets import (
-    QWidget
-    , QLabel
-    , QTextEdit
-    , QVBoxLayout
-    , QApplication
-)  
-from PySide2.QtGui import QTextCursor, QColor 
-from PySide2.QtCore import QEventLoop 
-# pylint: enable=E0611
+from PySide6.QtWidgets import QWidget, QTextEdit, QVBoxLayout, QApplication
+from PySide6.QtGui import QTextCursor, QColor 
+from PySide6.QtCore import QEventLoop 
 
 class Logger:
 

@@ -17,9 +17,9 @@ class UiFile:
                     path = path.replace('site-packages', 'Scripts')
                     if not os.path.exists(path):
                         continue
-                    return path + '\\pyside2-uic.exe'
+                    return path + '\\pyside6-uic.exe'
             else:
-                return str(Path.home()) + '/.local/bin/pyside2-uic'
+                return str(Path.home()) + '/.local/bin/pyside6-uic'
 
             return None
 

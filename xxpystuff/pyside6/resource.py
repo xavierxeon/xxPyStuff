@@ -35,12 +35,12 @@ class Resource(list):
     @staticmethod
     def makePythonFile(rcFile, pythonFile):
 
-        import PySide2.QtCore
+        import PySide6.QtCore
         path = os.path.dirname(PySide2.QtCore.__file__)
         if 'Windows' == platform.system():
-            rccExe = path + '\\pyside2-rcc.exe'
+            rccExe = path + '\\pyside6-rcc.exe'
         else:
-            rccExe = path + '/pyside2-rcc'
+            rccExe = path + '/pyside6-rcc'
 
         if not os.path.exists(rccExe):
             return
