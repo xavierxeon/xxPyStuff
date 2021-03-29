@@ -7,13 +7,19 @@ class Console:
    class Color:
       Clear = '\033[0m'
       Bold = '\033[1m'
+      Red = '\033[31m'
+      Green = '\033[32m'
+      Yellow = '\033[33m'
+      Blue = '\033[34m'
+      Magenta = '\033[35m'
+      Cyan = '\033[36m'
       Grey = '\033[90m'
-      Red = '\033[91m'
-      Green = '\033[92m'
-      Yellow = '\033[93m'
-      Blue = '\033[94m'
-      Magenta = '\033[95m'
-      Cyan = '\033[96m'
+      LightRed = '\033[91m'
+      LightGreen = '\033[92m'
+      LightYellow = '\033[93m'
+      LightBlue = '\033[94m'
+      LightMagenta = '\033[95m'
+      LightCyan = '\033[96m'
       White = '\033[97m'
 
    __initilized = False
@@ -43,28 +49,46 @@ class Console:
       return Console._write(message, bold, Console.Color.Grey)
 
    @staticmethod
-   def red(message, bold = False):
-      return Console._write(message, bold, Console.Color.Red)
+   def red(message, light = True, bold = False):
+      if light:
+         return Console._write(message, bold, Console.Color.LightRed)
+      else:
+         return Console._write(message, bold, Console.Color.Red)
 
    @staticmethod
-   def green(message, bold = False):
-      return Console._write(message, bold, Console.Color.Green)        
+   def green(message, light = True, bold = False):
+      if light:
+         return Console._write(message, bold, Console.Color.LightGreen)        
+      else:
+         return Console._write(message, bold, Console.Color.Green)        
 
    @staticmethod
-   def yellow(message, bold = False):
-      return Console._write(message, bold, Console.Color.Yellow)
+   def yellow(message, light = True, bold = False):
+      if light:
+         return Console._write(message, bold, Console.Color.LightYellow)
+      else:
+         return Console._write(message, bold, Console.Color.Yellow)
 
    @staticmethod
-   def blue(message, bold = False):
-      return Console._write(message, bold, Console.Color.Blue)
+   def blue(message, light = True, bold = False):
+      if light:
+         return Console._write(message, bold, Console.Color.LightBlue)
+      else:
+         return Console._write(message, bold, Console.Color.Blue)
          
    @staticmethod
-   def magenta(message, bold = False):
-      return Console._write(message, bold, Console.Color.Magenta)
+   def magenta(message, light = True, bold = False):
+      if light:
+         return Console._write(message, bold, Console.Color.LightMagenta)
+      else:
+         return Console._write(message, bold, Console.Color.Magenta)
 
    @staticmethod
-   def cyan(message, bold = False):
-      return Console._write(message, bold, Console.Color.Cyan)
+   def cyan(message, light = True, bold = False):
+      if light:
+         return Console._write(message, bold, Console.Color.LightCyan)
+      else:
+         return Console._write(message, bold, Console.Color.Cyan)
 
    @staticmethod
    def white(message, bold = False):
