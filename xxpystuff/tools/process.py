@@ -23,7 +23,7 @@ class Process:
       for arg in arguments:
          content.append(str(arg))
 
-      self._executeInternal(content)
+      return self._executeInternal(content)
 
    def start(self, argList = None):
 
@@ -32,7 +32,7 @@ class Process:
          for arg in argList:
                content.append(str(arg))
 
-      self._executeInternal(content)
+      return self._executeInternal(content)
 
    def stop(self):
 
