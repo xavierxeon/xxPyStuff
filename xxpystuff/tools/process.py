@@ -3,6 +3,8 @@
 import os
 from subprocess import Popen, PIPE, TimeoutExpired
 
+# On modern Python versions you can do capture_output=True instead of stdout=subprocess.PIPE. – Boris Feb 18 at 23:27
+
 class Process:
 
    def __init__(self, command, statusIndicator = None):
