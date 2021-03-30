@@ -36,7 +36,7 @@ def main():
 
    setuptools.setup(
       name="xxpystuff",
-      version="0.0.7",
+      version="0.0.8",
       author="Ralf Waspe",
       author_email="rwaspe@me.com",
       description="A collection of python tools",

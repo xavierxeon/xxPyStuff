@@ -6,3 +6,4 @@ from .statusindicator import StatusIndicatorAbstract, StatusIndicatorConsole
 from .jsonsettings import JSONSettings
 from .xmltools import XMLTools
 from .hideprints import HidePrints
+from .dropbox import Dropbox
