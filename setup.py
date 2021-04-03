@@ -22,7 +22,7 @@ def main_apple_silicon():
       url="https://github.com/xavierxeon/xxPyStuff",
       license='MIT',
       packages=packages,
-      install_requires=['colorama', 'todoist'],
+      install_requires=['colorama', 'todoist-python'],
       include_package_data=True,
       zip_safe=False,
    )
@@ -45,7 +45,7 @@ def main():
       url="https://github.com/xavierxeon/xxPyStuff",
       license='MIT',
       packages=packages,
-      install_requires=['colorama', 'pyside6', 'opencv-python', 'todoist'],
+      install_requires=['colorama', 'pyside6', 'opencv-python', 'todoist-python'],
       include_package_data=True,
       zip_safe=False,
    )
