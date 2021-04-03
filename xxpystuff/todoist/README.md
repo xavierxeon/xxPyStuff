@@ -1,0 +1,1 @@
+API can be found at: https://developer.todoist.com/sync/v7/
