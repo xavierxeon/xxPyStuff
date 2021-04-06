@@ -7,3 +7,4 @@ from .jsonsettings import JSONSettings
 from .xmltools import XMLTools
 from .hideprints import HidePrints
 from .dropbox import Dropbox
+from .helpfile import printHelpToFile
