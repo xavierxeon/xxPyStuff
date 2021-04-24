@@ -2,16 +2,16 @@
 
 from rtmidi.midiconstants import SONG_POSITION_POINTER, TIMING_CLOCK, SONG_START, SONG_CONTINUE, SONG_STOP, SYSTEM_EXCLUSIVE
 
-from .clock_abstract import ClockAbstract
-from .intput import Input
+from .clock_abstract import MidiClockAbstract
+from .intput import MidiInput
 
-class ClockExternal(ClockAbstract, Input):
+class MidiClockExternal(MidiClockAbstract, MidiInput):
 
    def __init__(self, name = None, port = None):
 
-      ClockAbstract.__init__(self)
+      MidiClockAbstract.__init__(self)
       print('clock')
-      Input.__init__(self, name, port)
+      MidiInput.__init__(self, name, port)
       self.midiin.ignore_types(timing = False)
       
    def _callback(self, event, data):
@@ -26,9 +26,9 @@ class ClockExternal(ClockAbstract, Input):
       elif midiEvent == TIMING_CLOCK:
          self._clockTick() 
       elif midiEvent == SONG_START:
-         self._setState(ClockAbstract.State.Start)
+         self._setState(MidiClockAbstract.State.Start)
       elif midiEvent == SONG_CONTINUE:
-         self._setState(ClockAbstract.State.Continue)
+         self._setState(MidiClockAbstract.State.Continue)
       elif midiEvent == SONG_STOP:
-         self._setState(ClockAbstract.State.Stop)
+         self._setState(MidiClockAbstract.State.Stop)
 

@@ -3,7 +3,7 @@
 from rtmidi import MidiIn
 from rtmidi.midiconstants import NOTE_ON, NOTE_OFF, SYSTEM_EXCLUSIVE
 
-class Input:
+class MidiInput:
 
    def __init__(self, name = None, port = None):
 
@@ -22,9 +22,22 @@ class Input:
 
       self.midiin.set_callback(self._callback)
 
+      self._noteOnCallbackList = list()
+      self._noteOffCallbackList = list()      
+
    def __del__(self):
 
+      print('close port')
       self.midiin.close_port()
+      del self.midiin # to remove virtual port
+
+   def onNoteOn(self, callback):
+
+      self._noteOnCallbackList.append(callback)
+
+   def onNoteOff(self, callback):
+
+      self._noteOffCallbackList.append(callback)
 
    @staticmethod
    def available():
@@ -35,10 +48,14 @@ class Input:
 
       message,_ = event
       midiEvent = message[0] & SYSTEM_EXCLUSIVE
+      if not midiEvent: # was system event
+         return
+
       if midiEvent == NOTE_ON:
          status, note, velocity = message
          channel = (status & 0x0F) + 1
-         print('note on', channel, note, velocity)
+         for callback in self._noteOnCallbackList:
+            callback(channel, note, velocity)
       elif midiEvent == NOTE_OFF:
          status, note, velocity = message
          channel = (status & 0x0F) + 1

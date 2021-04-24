@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-class ClockAbstract:
+class MidiClockAbstract:
 
    class State:
 
@@ -14,24 +14,22 @@ class ClockAbstract:
          Continue: 'Continue'
       }
 
-
    def __init__(self):
 
-      self.stateCallbackList = list()
       self.state = ClockAbstract.State.Stop
-
-      self.positionCallbackList = list()      
       self.position = 1
 
+      self._stateCallbackList = list()
+      self._positionCallbackList = list()      
       self._tickCounter = 0
 
-   def addStateCallBack(self, callback):
+   def onStateChange(self, callback):
 
-      self.stateCallbackList.append(callback)
+      self._stateCallbackList.append(callback)
 
-   def addPositionCallBack(self, callback):
+   def onPositionChange(self, callback):
 
-      self.positionCallbackList.append(callback)
+      self._positionCallbackList.append(callback)
 
    @staticmethod
    def timeCode(position):
@@ -50,7 +48,7 @@ class ClockAbstract:
    def _setState(self, state):
 
       self.state = state
-      for callback in self.stateCallbackList:
+      for callback in self._stateCallbackList:
          callback(state)
 
    def _clockTick(self):
@@ -65,5 +63,5 @@ class ClockAbstract:
       self.position = position
       self._tickCounter = 0
 
-      for callback in self.positionCallbackList:
+      for callback in self._positionCallbackList:
          callback(position)      

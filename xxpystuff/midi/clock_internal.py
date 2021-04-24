@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from .clock_abstract import ClockAbstract
+from .clock_abstract import MidiClockAbstract
 
-class ClockInternal(ClockAbstract):
+class MidiClockInternal(MidiClockAbstract):
 
    def __init__(self, beatsPerMinute: int):
 
-      ClockAbstract.__init__(self)
+      MidiClockAbstract.__init__(self)

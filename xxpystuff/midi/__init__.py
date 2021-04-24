@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from .clock_abstract import ClockAbstract
-from .clock_internal import ClockInternal
-from .clock_external import ClockExternal
-from .intput import Input
+from .clock_abstract import MidiClockAbstract
+from .clock_internal import MidiClockInternal
+from .clock_external import MidiClockExternal
+from .intput import MidiInput
