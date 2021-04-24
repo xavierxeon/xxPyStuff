@@ -27,7 +27,7 @@ class Sequencer:
          eventList = eventMap[position]
          eventList.append( [note, channel] )
 
-         orderList = list(self._noteOnMap.keys())
+         orderList = list(eventMap.keys())
          orderList.sort()
          return orderList
 
@@ -43,7 +43,10 @@ class Sequencer:
 
    def _songPostion(self, position):
 
-      if position > self._noteOnPositions[-1] and position > self._noteOffPositions[-1]:
+      lastOn = 0 if not self._noteOnPositions else self._noteOnPositions[-1] 
+      lastOff = 0 if not self._noteOffPositions else self._noteOffPositions[-1]
+
+      if position > lastOn and position > lastOff:
          for callback in self._finsihedCallbackList:
             callback()
          return

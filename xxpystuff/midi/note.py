@@ -38,3 +38,6 @@ class Note:
       value = noteValues[root] + (12 * octave)
       return value      
 
+   def __str__(self):
+
+      return '( {0} * {1} @ {2} )'.format(self.pitch, self.duration, self.velocity)
