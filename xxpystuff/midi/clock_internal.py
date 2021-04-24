@@ -41,6 +41,9 @@ class MidiClockInternal(MidiClockAbstract):
 
    def _nextTimer(self):
 
+      if self.state != MidiClockAbstract.State.Start:
+         return
+         
       secondsPerTick = 2.5 / self.beatsPerMinute
 
       self._timer = Timer(secondsPerTick, self._timeout)
