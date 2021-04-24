@@ -52,11 +52,12 @@ class MidiInput:
          return
 
       if midiEvent == NOTE_ON:
-         status, note, velocity = message
+         status, pitch, velocity = message
          channel = (status & 0x0F) + 1
          for callback in self._noteOnCallbackList:
-            callback(channel, note, velocity)
+            callback(channel, pitch, velocity)
       elif midiEvent == NOTE_OFF:
-         status, note, velocity = message
+         status, pitch = message
          channel = (status & 0x0F) + 1
-         print('note off', channel, note, velocity)
+         for callback in self._noteOffCallbackList:
+            callback(channel, pitch)

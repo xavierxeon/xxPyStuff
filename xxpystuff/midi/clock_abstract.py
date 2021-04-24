@@ -16,12 +16,14 @@ class MidiClockAbstract:
 
    def __init__(self):
 
-      self.state = ClockAbstract.State.Stop
+      self.state = MidiClockAbstract.State.Stop
       self.position = 1
 
       self._stateCallbackList = list()
       self._positionCallbackList = list()      
       self._tickCounter = 0
+
+      self._last_time = None
 
    def onStateChange(self, callback):
 
