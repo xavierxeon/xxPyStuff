@@ -21,6 +21,7 @@ class MidiClockInternal(MidiClockAbstract):
    def start(self):
 
       self._setState(MidiClockAbstract.State.Start)
+      self._setSongPosition(1) 
       self._nextTimer()
 
    def stop(self):

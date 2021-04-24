@@ -1,37 +1,21 @@
 #!/usr/bin/env python3
 
-class MidiNote:
+class Note:
 
-   class Duration:
+   Sixteenth = 1
+   Eighth = 2
+   Quarter = 4
+   Half = 8
+   Full = 16
 
-      def __init__(self, tempo = 120):
+   def __init__(self, pitch, duration, velocity = 127):
 
-         self._quartersPerSecond = tempo / 60
-
-      def half(self):
-
-         return self._duration(0.5)
-
-      def quarter(self):
-
-         return self._duration(1)
-
-      def eighth(self):
-
-         return self._duration(2)
-
-      def sixteenth(self):
-
-         return self._duration(4)
-
-      def _duration(self, notePerQaurter):
-
-         notesPerSecond =  notePerQaurter * self._quartersPerSecond 
-         secondsPerNote = 1/ notesPerSecond
-         return secondsPerNote
+      self.pitch = pitch
+      self.duration = duration
+      self.velocity = velocity
 
    @staticmethod
-   def convert(note):
+   def pitch(note):
 
       noteValues = {
          'C': 0, 
@@ -53,3 +37,4 @@ class MidiNote:
       octave = int(note[-1:]) + 1
       value = noteValues[root] + (12 * octave)
       return value      
+

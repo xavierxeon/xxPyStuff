@@ -6,3 +6,5 @@ from .clock_external import MidiClockExternal
 from .intput import MidiInput
 from .output import MidiOutput
 from .sequencer import Sequencer
+from .timecode import TimeCode
+from .note import Note

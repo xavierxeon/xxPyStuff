@@ -33,20 +33,6 @@ class MidiClockAbstract:
 
       self._positionCallbackList.append(callback)
 
-   @staticmethod
-   def timeCode(position):
-
-      if position <= 0:
-         return None
-
-      position -= 1
-
-      back = position % 4   
-      mid = ((position - back) / 4) % 4
-      front = (((position - back) / 4) - mid) / 4
-
-      return [int(front) + 1, int(mid) + 1, int(back) + 1]
-
    def _setState(self, state):
 
       self.state = state
