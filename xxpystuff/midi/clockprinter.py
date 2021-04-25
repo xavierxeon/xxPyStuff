@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from .clock_abstract import MidiClockAbstract
+from .clock_abstract import ClockAbstract
 from .timecode import TimeCode
 
 class ClockPrinter:
@@ -13,9 +13,9 @@ class ClockPrinter:
       self._lastBar = 0
       self._lastQuarter = 0
    
-   def stateChange(self, state: MidiClockAbstract.State):
+   def stateChange(self, state: ClockAbstract.State):
 
-      print(MidiClockAbstract.State.names[state])
+      print(ClockAbstract.State.names[state])
 
    def songPostion(self, position):
 

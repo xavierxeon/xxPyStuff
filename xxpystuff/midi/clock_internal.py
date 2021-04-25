@@ -2,13 +2,13 @@
 
 from threading import Timer
 
-from .clock_abstract import MidiClockAbstract
+from .clock_abstract import ClockAbstract
 
-class MidiClockInternal(MidiClockAbstract):
+class ClockInternal(ClockAbstract):
 
    def __init__(self, beatsPerMinute: int):
 
-      MidiClockAbstract.__init__(self)
+      ClockAbstract.__init__(self)
       self.beatsPerMinute = beatsPerMinute
 
       self._timer = None
@@ -20,13 +20,13 @@ class MidiClockInternal(MidiClockAbstract):
 
    def start(self):
 
-      self._setState(MidiClockAbstract.State.Start)
+      self._setState(ClockAbstract.State.Start)
       self._setSongPosition(1) 
       self._nextTimer()
 
    def stop(self):
 
-      self._setState(MidiClockAbstract.State.Stop)
+      self._setState(ClockAbstract.State.Stop)
       if self._timer:
          self._timer.cancel()
          self._timer = None
@@ -41,9 +41,9 @@ class MidiClockInternal(MidiClockAbstract):
 
    def _nextTimer(self):
 
-      if self.state != MidiClockAbstract.State.Start:
+      if self.state != ClockAbstract.State.Start:
          return
-         
+
       secondsPerTick = 2.5 / self.beatsPerMinute
 
       self._timer = Timer(secondsPerTick, self._timeout)

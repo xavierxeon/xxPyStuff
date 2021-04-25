@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-class MidiClockAbstract:
+class ClockAbstract:
 
    class State:
 
@@ -16,7 +16,7 @@ class MidiClockAbstract:
 
    def __init__(self):
 
-      self.state = MidiClockAbstract.State.Stop
+      self.state = ClockAbstract.State.Stop
       self.position = 1
 
       self._stateCallbackList = list()

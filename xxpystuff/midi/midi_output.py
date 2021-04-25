@@ -36,6 +36,10 @@ class MidiOutput:
       data = [ NOTE_OFF | (channel - 1), pitch, 0 ]
       self.midiout.send_message(data)
 
+   def allNotesOff(self):
+
+      print('all notes off')
+
    @staticmethod
    def available():
 
