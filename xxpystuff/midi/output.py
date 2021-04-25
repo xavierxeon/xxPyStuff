@@ -28,11 +28,13 @@ class MidiOutput:
 
    def noteOn(self, channel, pitch, velocity):
 
-      pass
+      data = [ NOTE_ON | (channel - 1), pitch, velocity ]
+      self.midiout.send_message(data)
 
    def noteOff(self, channel, pitch):
 
-      pass
+      data = [ NOTE_OFF | (channel - 1), pitch, 0 ]
+      self.midiout.send_message(data)
 
    @staticmethod
    def available():

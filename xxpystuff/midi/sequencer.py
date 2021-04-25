@@ -53,8 +53,8 @@ class Sequencer:
       
       if position in self._noteOffMap:
          for entry in self._noteOffMap[position]:
-            print('off', entry[0], entry[1])
+            self._output.noteOff(entry[1], entry[0].pitch)
 
       if position in self._noteOnMap:
          for entry in self._noteOnMap[position]:
-            print('on', entry[0], entry[1])
+            self._output.noteOn(entry[1], entry[0].pitch, entry[0].velocity)

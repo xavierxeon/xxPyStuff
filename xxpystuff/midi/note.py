@@ -40,4 +40,4 @@ class Note:
 
    def __str__(self):
 
-      return '( {0} * {1} @ {2} )'.format(self.pitch, self.duration, self.velocity)
+      return '( {0} #{1} @{2} )'.format(self.pitch, self.duration, self.velocity)

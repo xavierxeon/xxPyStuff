@@ -8,3 +8,4 @@ from .output import MidiOutput
 from .sequencer import Sequencer
 from .timecode import TimeCode
 from .note import Note
+from .clockprinter import ClockPrinter
