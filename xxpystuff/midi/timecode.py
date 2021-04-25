@@ -39,5 +39,5 @@ class TimeCode:
 
    def __str__(self):
 
-      return '[ bar {0}, quarter {1}, {2} ]'.format(self.bar, self.quarter, self.subDivision)
+      return '[{0}.{1}.{2}]'.format(self.bar, self.quarter, self.subDivision)
 

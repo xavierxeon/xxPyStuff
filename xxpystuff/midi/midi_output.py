@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from rtmidi import MidiOut
-from rtmidi.midiconstants import NOTE_ON, NOTE_OFF
+from rtmidi.midiconstants import NOTE_ON, NOTE_OFF, CONTROLLER_CHANGE
 
 class MidiOutput:
 
@@ -35,10 +35,6 @@ class MidiOutput:
 
       data = [ NOTE_OFF | (channel - 1), pitch, 0 ]
       self.midiout.send_message(data)
-
-   def allNotesOff(self):
-
-      print('all notes off')
 
    @staticmethod
    def available():

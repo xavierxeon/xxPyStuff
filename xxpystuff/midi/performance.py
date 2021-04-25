@@ -11,16 +11,22 @@ class Performance:
    def __init__(self, bpm, output, clock = None):
 
       self.masterClock = clock if clock else ClockInternal(bpm)
-      ClockPrinter(self.masterClock)
-
       self.sequencer = Sequencer(self.masterClock, output)
 
       self._running = False
+      self._clockPrinter = None
       self.sequencer.onFinished(self._finshed)
 
    def addNote(self, startTimeCode, note, channel):      
 
-      self.sequencer.addNote(startTimeCode, note, channel)           
+      self.sequencer.addNote(startTimeCode, note, channel)       
+
+   def printClock(self, resolution = ClockPrinter.Resolution.Quarter):
+
+      if self._clockPrinter:
+         del self._clockPrinter
+
+      self._clockPrinter = ClockPrinter(self.masterClock, resolution)
 
    def run(self):  
 
@@ -33,7 +39,6 @@ class Performance:
       except KeyboardInterrupt:
          print()
          print('user interruption')
-         self.sequencer._output.allNotesOff()
          pass
       finally:
          self.masterClock.stop()            

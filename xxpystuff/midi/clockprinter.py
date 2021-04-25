@@ -5,13 +5,18 @@ from .timecode import TimeCode
 
 class ClockPrinter:
 
-   def __init__(self, clock):
+   class Resolution:
+      Full = 1
+      Quarter = 4
+      Bar = 16
+
+   def __init__(self, clock, resolution = Resolution.Quarter):
 
       clock.onStateChange(self.stateChange)
       clock.onPositionChange(self.songPostion)
 
-      self._lastBar = 0
-      self._lastQuarter = 0
+      self._resolution = resolution
+      self._posCount = resolution
    
    def stateChange(self, state: ClockAbstract.State):
 
@@ -19,7 +24,16 @@ class ClockPrinter:
 
    def songPostion(self, position):
 
-      timeCode = TimeCode.fromPosition(position)
-      if timeCode.quarter != self._lastQuarter:
-         print(timeCode)
-         self._lastQuarter = timeCode.quarter
+      if self._posCount == self._resolution:
+         timeCode = TimeCode.fromPosition(position)
+         if ClockPrinter.Resolution.Full == self._resolution:
+            print(timeCode)
+         elif ClockPrinter.Resolution.Quarter == self._resolution:
+            text = '[{0}.{1}._]'.format(timeCode.bar, timeCode.quarter)
+            print(text)
+         elif ClockPrinter.Resolution.Bar == self._resolution:
+            text = '[ {0}._._]'.format(timeCode.bar, timeCode.quarter)
+            print(text)
+         self._posCount = 1
+      else:
+         self._posCount += 1
