@@ -2,17 +2,30 @@
 
 import numpy as np
 
+
 class Image:
 
-    def __init__(self, width, height):
+    @staticmethod
+    def create(width, height, clearColor=None):
 
-        self._width = width
-        self._height = height
-
-    def create(self, clearColor = None):
-        
-        blank_image = np.zeros((self._height, self._width, 3), np.uint8)
+        blank_image = np.zeros((height, width, 3), np.uint8)
         if clearColor:
-            blank_image[:,:] = tuple(clearColor)
-            
+            blank_image[:, :] = tuple(clearColor)
+
         return blank_image
+
+    @staticmethod
+    def color(red, green, blue, alpha=None):
+
+        if None != alpha:
+            return (blue, green, red, alpha)
+        else:
+            return (blue, green, red)
+
+    @staticmethod
+    def gray(gray=0, alpha=None):
+
+        if None != alpha:
+            return (gray, gray, gray, alpha)
+        else:
+            return (gray, gray, gray)
