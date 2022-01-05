@@ -54,5 +54,7 @@ if __name__ == '__main__':
 
    if platform.system() == 'Darwin' and platform.machine() == 'arm64':
       main_apple_silicon()
+   elif platform.machine() == 'aarch64':
+      main_apple_silicon()
    else:
       main()
