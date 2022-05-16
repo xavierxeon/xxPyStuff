@@ -5,98 +5,102 @@ from subprocess import Popen, PIPE, TimeoutExpired
 
 # On modern Python versions you can do capture_output=True instead of stdout=subprocess.PIPE. – Boris Feb 18 at 23:27
 
+
 class Process:
 
-   def __init__(self, command, statusIndicator = None):
+    def __init__(self, command, statusIndicator=None):
 
-      self.workDir = None
-      self.output = None
-      self.error = None
+        self.workDir = None
+        self.output = None
+        self.error = None
 
-      self._command = command
-      self._statusIndicator = statusIndicator
-      self._handle = None
+        self._command = command
+        self._statusIndicator = statusIndicator
+        self._handle = None
 
-   def startWithArguments(self, *arguments):
+    def startWithArguments(self, *arguments):
 
-      content = [ self._command ]
-      for arg in arguments:
-         content.append(str(arg))
+        content = [self._command]
+        for arg in arguments:
+            content.append(str(arg))
 
-      return self._executeInternal(content)
+        return self._executeInternal(content)
 
-   def start(self, argList = None):
+    def start(self, argList=None):
 
-      content = [ self._command ]
-      if argList:
-         for arg in argList:
-               content.append(str(arg))
+        content = [self._command]
+        if argList:
+            for arg in argList:
+                content.append(str(arg))
 
-      return self._executeInternal(content)
+        return self._executeInternal(content)
 
-   def stop(self):
+    def stop(self):
 
-      if not self._handle:
-         return
+        if not self._handle:
+            return
 
-      self._handle.kill()
+        self._handle.kill()
 
-      del self._handle
-      self._handle = None
+        del self._handle
+        self._handle = None
 
-   def write(self, text):
+    def write(self, text):
 
-      pass
+        if self._handle:
+            self._handle.stdin.write(text)
+        else:
+            print('no handle')
 
-   @staticmethod
-   def execute(command, workDir = None, statusIndicator = None):
+    @staticmethod
+    def execute(command, workDir=None, statusIndicator=None):
 
-      current = os.getcwd()
-      if workDir:
-         os.chdir(workDir)
+        current = os.getcwd()
+        if workDir:
+            os.chdir(workDir)
 
-      output = None
-      error = None
+        output = None
+        error = None
 
-      if not statusIndicator:
-         with Popen(command, stdout = PIPE, stderr = PIPE) as process:
-            output, error = process.communicate()
-      else:
-         with Popen(command, stdout = PIPE, stderr = PIPE, stdin = PIPE, bufsize = 1, universal_newlines = True) as process:
-            while True:
-               try:
-                  output, error = process.communicate(None, 0.2)
-                  break 
-               except TimeoutExpired:
-                  statusIndicator.busy()
+        if not statusIndicator:
+            with Popen(command, stdout=PIPE, stderr=PIPE) as process:
+                output, error = process.communicate()
+        else:
+            with Popen(command, stdout=PIPE, stderr=PIPE, stdin=PIPE, bufsize=1, universal_newlines=True) as process:
+                while True:
+                    try:
+                        output, error = process.communicate(None, 0.2)
+                        break
+                    except TimeoutExpired:
+                        statusIndicator.busy()
 
-      os.chdir(current)
+        os.chdir(current)
 
-      if error:
-         return error
-      elif output:
-         return output
-      else:
-         return None
-         
-   def _executeInternal(self, content):
+        if error:
+            return error
+        elif output:
+            return output
+        else:
+            return None
 
-      current = os.getcwd()
-      if self.workDir:
-         os.chdir(self.workDir)
+    def _executeInternal(self, content):
 
-      self._handle = Popen(content, stdout = PIPE, stderr = PIPE, stdin = PIPE, bufsize = 1, universal_newlines = True)
-      success = False
-      while True:
-         try:
-            self.output, self.error = self._handle.communicate(None, 0.2)
-            success = True
-            break 
-         except TimeoutExpired:
-            if self._statusIndicator:
-               self._statusIndicator.busy()
+        current = os.getcwd()
+        if self.workDir:
+            os.chdir(self.workDir)
 
-      self.stop()
-      os.chdir(current)
+        self._handle = Popen(content, stdout=PIPE, stderr=PIPE, stdin=PIPE, bufsize=1, universal_newlines=True)
+        success = False
+        while True:
+            try:
+                self.output, self.error = self._handle.communicate(None, 10.0)
+                success = True
+                break
+            except TimeoutExpired:
+                if self._statusIndicator:
+                    self._statusIndicator.busy()
 
-      return success
+        self.stop()
+        os.chdir(current)
+
+        return success
